@@ -12,7 +12,6 @@ import ScanHistory from '@/components/scanner/ScanHistory.vue';
 import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 import IndustrialButton from '@/components/ui/IndustrialButton.vue';
 import CropMarks from '@/components/ui/CropMarks.vue';
-import MeasurementRuler from '@/components/ui/MeasurementRuler.vue';
 
 const activeInputMode = ref<'camera' | 'image'>('camera');
 const errorMessage = ref<string | null>(null);

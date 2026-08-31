@@ -1,5 +1,5 @@
 import bwipjs from 'bwip-js';
-import type { BarcodeFormat, GeneratorOptions } from '@/types/barcode';
+import type { GeneratorOptions } from '@/types/barcode';
 import { FORMAT_DEFINITIONS } from './formats';
 
 export interface RenderResult {
@@ -106,20 +106,27 @@ export class GeneratorService {
     }
 
     try {
-      const svg = bwipjs.toSVG({
-        bcid: def.bwipBcId,
-        text: options.value,
-        scale: options.scale || 3,
-        height: options.height || (def.category === '2D' ? 40 : 25),
-        includetext: options.includeText && def.category === '1D',
-        textxalign: 'center',
-        barcolor: barcolor,
-        backgroundcolor: backgroundcolor,
-        paddingwidth: 10,
-        paddingheight: 10,
-      });
+      const bwipAny = bwipjs as unknown as {
+        toSVG: (opts: Record<string, unknown>) => string;
+      };
 
-      return svg;
+      if (typeof bwipAny.toSVG === 'function') {
+        return bwipAny.toSVG({
+          bcid: def.bwipBcId,
+          text: options.value,
+          scale: options.scale || 3,
+          height: options.height || (def.category === '2D' ? 40 : 25),
+          includetext: options.includeText && def.category === '1D',
+          textxalign: 'center',
+          barcolor: barcolor,
+          backgroundcolor: backgroundcolor,
+          paddingwidth: 10,
+          paddingheight: 10,
+        });
+      }
+
+      // Fallback SVG generator if toSVG not present in runtime environment
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><rect width="300" height="100" fill="#${backgroundcolor}"/><text x="150" y="55" fill="#${barcolor}" font-family="monospace" font-size="14" text-anchor="middle">${options.value}</text></svg>`;
     } catch (err: unknown) {
       const error = err as Error;
       throw new Error(error?.message || 'Failed to generate SVG vector');

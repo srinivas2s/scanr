@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import type { BarcodeFormat, FormatDefinition, GeneratorOptions } from '@/types/barcode';
 import type { SpecimenPreset } from '@/composables/useBarcodeGenerator';
 import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
-import IndustrialButton from '@/components/ui/IndustrialButton.vue';
 
 interface Props {
   selectedFormat: BarcodeFormat;
@@ -19,7 +18,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'update:barcodeValue', val: string): void;
   (e: 'update:scale', val: number): void;
   (e: 'update:height', val: number): void;
