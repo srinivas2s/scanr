@@ -60,13 +60,8 @@ const navigateTo = (path: string) => {
         </router-link>
       </nav>
 
-      <!-- Right Side Fluid Pill & Action -->
+      <!-- Right Side Action -->
       <div class="hidden sm:flex items-center gap-3">
-        <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-pill-emerald text-xs font-mono font-bold">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>100% In-Browser</span>
-        </div>
-
         <router-link
           v-if="route.path !== '/scan'"
           to="/scan"
