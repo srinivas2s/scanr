@@ -13,7 +13,7 @@ export function useScanner() {
     fps: 0,
     resolution: '0x0',
     activeCamera: 'AUTO',
-    engine: scannerService.isNativeSupported() ? 'NATIVE_OPTICAL' : 'ZXING_FALLBACK',
+    engine: scannerService.isNativeSupported() ? 'NATIVE_OPTICAL' : 'ZXING_MULTI_PASS',
     torchSupported: false,
     torchActive: false,
   });
@@ -38,13 +38,13 @@ export function useScanner() {
       stats.value.fps = Math.round((frameCount * 1000) / (now - lastFpsUpdate));
       frameCount = 0;
       lastFpsUpdate = now;
-      if (video.videoWidth) {
+      if (video.videoWidth && video.videoHeight) {
         stats.value.resolution = `${video.videoWidth}x${video.videoHeight}`;
       }
     }
 
-    // Inspect frame every 80ms (approx 12-15 detections/sec) for optimal balance of responsiveness and battery efficiency
-    if (now - lastDetectionAttempt > 80) {
+    // Inspect frame every 50ms (~20 attempts/sec) for instant optical lock-on
+    if (now - lastDetectionAttempt > 50) {
       lastDetectionAttempt = now;
       try {
         const result = await scannerService.scanVideoFrame(video);
