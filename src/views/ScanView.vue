@@ -133,30 +133,30 @@ onUnmounted(() => {
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 font-sans">
     
     <!-- Page Header & Mode Switcher -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-slate-200 pb-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-slate-200/80 pb-6">
       <div class="space-y-1">
-        <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900">
+        <h1 class="font-display font-black text-3xl sm:text-4xl text-slate-900">
           Barcode Scanner
         </h1>
-        <p class="text-sm text-slate-600 max-w-xl font-sans">
+        <p class="text-sm text-slate-600 max-w-xl font-sans font-medium">
           Scan QR codes, retail EAN/UPC, logistics Code 128, and 2D matrices locally in your browser.
         </p>
       </div>
 
-      <!-- Mode Toggle Switcher -->
-      <div class="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 self-start sm:self-auto">
+      <!-- Mode Toggle Switcher with Clay Inset Well -->
+      <div class="flex items-center p-1.5 rounded-2xl clay-inset self-start sm:self-auto">
         <button
           @click="switchInputMode('camera')"
           type="button"
-          class="px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-2"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2"
           :class="[
             activeInputMode === 'camera'
-              ? 'bg-white text-slate-900 shadow-xs font-bold'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'clay-btn-amber text-slate-950 font-bold'
+              : 'text-slate-600 hover:text-slate-950'
           ]"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
           <span>Camera Stream</span>
         </button>
@@ -164,15 +164,15 @@ onUnmounted(() => {
         <button
           @click="switchInputMode('image')"
           type="button"
-          class="px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-2"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2"
           :class="[
             activeInputMode === 'image'
-              ? 'bg-white text-slate-900 shadow-xs font-bold'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'clay-btn-amber text-slate-950 font-bold'
+              : 'text-slate-600 hover:text-slate-950'
           ]"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <span>Upload Image</span>
         </button>
@@ -182,15 +182,15 @@ onUnmounted(() => {
     <!-- Error / Notice Banner (if any) -->
     <div
       v-if="cameraError || errorMessage"
-      class="p-4 rounded-xl bg-red-50 border border-red-200 text-slate-800 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
+      class="p-5 rounded-2xl clay-card border-2 border-red-200 bg-red-50/70 text-slate-800 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm"
     >
       <div class="flex items-center gap-3">
-        <span class="w-2.5 h-2.5 rounded-full bg-red-600 flex-shrink-0"></span>
+        <span class="w-3 h-3 rounded-full bg-red-600 flex-shrink-0 animate-pulse"></span>
         <div>
-          <div class="font-semibold text-red-800">
+          <div class="font-bold text-red-800">
             {{ permissionDenied ? 'Camera Access Needed' : 'Notice' }}
           </div>
-          <p class="text-slate-700 leading-relaxed">
+          <p class="text-slate-700 leading-relaxed font-medium">
             {{ cameraError || errorMessage }}
           </p>
         </div>
@@ -203,7 +203,7 @@ onUnmounted(() => {
           variant="acid"
           size="sm"
         >
-          Use Image Upload Instead
+          Use Image Upload
         </IndustrialButton>
 
         <IndustrialButton
@@ -273,11 +273,11 @@ onUnmounted(() => {
       <div class="lg:col-span-4 space-y-6">
         
         <!-- Quick Tips Card -->
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 text-xs">
-          <div class="font-semibold text-slate-900">
+        <div class="p-6 rounded-3xl clay-card space-y-3 text-xs">
+          <div class="font-bold text-slate-900 text-sm">
             Scanning Tips
           </div>
-          <ul class="space-y-2 text-slate-600 leading-relaxed">
+          <ul class="space-y-2.5 text-slate-600 leading-relaxed font-medium">
             <li class="flex items-start gap-2">
               <span class="text-amber-500 font-bold">•</span>
               <span>Position the barcode in the center of the camera frame.</span>
@@ -288,7 +288,7 @@ onUnmounted(() => {
             </li>
             <li class="flex items-start gap-2">
               <span class="text-amber-500 font-bold">•</span>
-              <span>Paste screenshots directly with <kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-[10px] text-slate-800 shadow-xs">Ctrl+V</kbd>.</span>
+              <span>Paste screenshots directly with <kbd class="px-2 py-0.5 rounded-md clay-pill font-mono text-[10px] text-slate-800 font-bold">Ctrl+V</kbd>.</span>
             </li>
           </ul>
         </div>

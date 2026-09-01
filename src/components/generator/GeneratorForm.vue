@@ -42,7 +42,7 @@ const colorSchemes = [
   { id: 'bw', label: 'Classic B&W', bar: '#000000', bg: '#ffffff' },
   { id: 'invert', label: 'Dark Inverted', bar: '#ffffff', bg: '#0f172a' },
   { id: 'hazard', label: 'Safety Red', bar: '#dc2626', bg: '#ffffff' },
-  { id: 'acid', label: 'Amber Accent', bar: '#0f172a', bg: '#fbbf24' },
+  { id: 'acid', label: 'Amber Clay', bar: '#451a03', bg: '#fbbf24' },
   { id: 'cyan', label: 'Cyan Blueprint', bar: '#0284c7', bg: '#f0f9ff' },
 ] as const;
 </script>
@@ -51,15 +51,15 @@ const colorSchemes = [
   <div class="space-y-6 font-sans">
     
     <!-- Input Section -->
-    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+    <div class="p-6 sm:p-7 rounded-3xl clay-card space-y-4">
       <div class="flex items-center justify-between">
-        <label for="barcode-input" class="text-sm font-semibold text-slate-900 flex items-center gap-2">
+        <label for="barcode-input" class="text-sm font-bold text-slate-900 flex items-center gap-2">
           <span>Payload Value</span>
-          <span class="px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-semibold">
+          <span class="px-3 py-1 clay-pill-amber text-xs font-mono font-bold">
             {{ currentDefinition.name }}
           </span>
         </label>
-        <span class="text-xs text-slate-500 font-mono">
+        <span class="text-xs text-slate-500 font-mono font-semibold">
           {{ barcodeValue.length }} chars
         </span>
       </div>
@@ -71,16 +71,16 @@ const colorSchemes = [
           :value="barcodeValue"
           @input="$emit('update:barcodeValue', ($event.target as HTMLInputElement).value)"
           :placeholder="currentDefinition.placeholder"
-          class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-base font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-colors"
+          class="w-full clay-inset px-4 py-3.5 text-base font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all font-semibold"
           :class="[
             validationError
-              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-              : 'border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200'
+              ? 'ring-2 ring-red-500 border-red-300'
+              : ''
           ]"
         />
 
         <!-- Validation Error message -->
-        <p v-if="validationError" class="text-xs text-red-600 font-medium">
+        <p v-if="validationError" class="text-xs text-red-600 font-bold">
           {{ validationError }}
         </p>
 
@@ -89,7 +89,7 @@ const colorSchemes = [
           <button
             @click="$emit('autoCalculateChecksum')"
             type="button"
-            class="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 hover:bg-amber-300 transition-colors shadow-xs"
+            class="px-4 py-2 clay-btn-amber text-xs font-bold flex items-center gap-1.5"
           >
             <span>+ Auto-Compute Mod-10 Checksum Digit</span>
           </button>
@@ -97,59 +97,59 @@ const colorSchemes = [
       </div>
 
       <!-- Format Description & Requirements Help -->
-      <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+      <div class="text-xs text-slate-600 leading-relaxed clay-inset p-3.5 rounded-2xl font-medium">
         {{ currentDefinition.description }}
       </div>
     </div>
 
     <!-- Quick Specimen Presets -->
-    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-      <div class="text-xs font-semibold uppercase tracking-wider text-slate-900 flex items-center justify-between">
+    <div class="p-6 rounded-3xl clay-card space-y-3">
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center justify-between">
         <span>Quick Presets</span>
-        <span class="text-[11px] text-slate-500">Fast Fill</span>
+        <span class="text-[11px] text-slate-500 font-medium">Fast Fill</span>
       </div>
 
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-2.5">
         <button
           v-for="preset in presets"
           :key="preset.id"
           type="button"
           @click="$emit('applyPreset', preset)"
-          class="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 text-xs text-slate-800 hover:text-slate-950 transition-colors flex items-center gap-2 group shadow-xs"
+          class="px-3.5 py-2 clay-pill hover:clay-pill-amber text-xs text-slate-800 transition-all flex items-center gap-2 group cursor-pointer"
         >
-          <span class="font-medium group-hover:text-amber-700">{{ preset.name }}</span>
+          <span class="font-bold group-hover:text-amber-900">{{ preset.name }}</span>
           <span class="text-[10px] font-mono text-slate-400">#{{ preset.format }}</span>
         </button>
       </div>
     </div>
 
     <!-- Visual Parameters Settings -->
-    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-5">
-      <div class="text-sm font-semibold text-slate-900 border-b border-slate-100 pb-2">
+    <div class="p-6 sm:p-7 rounded-3xl clay-card space-y-5">
+      <div class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">
         Appearance Options
       </div>
 
       <!-- Color Schemes -->
       <div class="space-y-2">
-        <div class="text-xs font-medium text-slate-600">
+        <div class="text-xs font-bold text-slate-600">
           Color Scheme
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           <button
             v-for="cs in colorSchemes"
             :key="cs.id"
             type="button"
             @click="$emit('update:colorScheme', cs.id)"
-            class="p-2 rounded-xl border text-xs font-medium transition-all flex flex-col items-center gap-2"
+            class="p-2.5 rounded-2xl border text-xs font-semibold transition-all flex flex-col items-center gap-2 cursor-pointer"
             :class="[
               colorScheme === cs.id
-                ? 'border-amber-500 bg-amber-50/60 shadow-xs ring-2 ring-amber-400 text-slate-950 font-bold'
-                : 'border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                ? 'clay-btn-white ring-2 ring-amber-500 text-slate-950 font-bold scale-[1.02]'
+                : 'clay-inset text-slate-600 hover:text-slate-950 hover:scale-[1.01]'
             ]"
           >
             <!-- Palette Color Swatch Preview -->
-            <div class="w-full h-4 rounded border border-slate-300 flex items-center justify-center" :style="{ backgroundColor: cs.bg }">
-              <span class="w-3.5 h-2 rounded-xs" :style="{ backgroundColor: cs.bar }"></span>
+            <div class="w-full h-4 rounded-lg border border-slate-300 shadow-inner flex items-center justify-center" :style="{ backgroundColor: cs.bg }">
+              <span class="w-4 h-2 rounded-xs shadow-xs" :style="{ backgroundColor: cs.bar }"></span>
             </div>
             <span class="text-[11px] truncate">{{ cs.label }}</span>
           </button>
@@ -161,8 +161,8 @@ const colorSchemes = [
         <!-- Scale Multiplier -->
         <div class="space-y-1.5">
           <div class="flex items-center justify-between text-xs text-slate-600">
-            <span>Scale:</span>
-            <span class="text-amber-700 font-mono font-bold">{{ scale }}x</span>
+            <span class="font-semibold">Scale:</span>
+            <span class="text-amber-800 font-mono font-bold">{{ scale }}x</span>
           </div>
           <input
             type="range"
@@ -171,15 +171,15 @@ const colorSchemes = [
             step="1"
             :value="scale"
             @input="$emit('update:scale', Number(($event.target as HTMLInputElement).value))"
-            class="w-full accent-amber-500 bg-slate-200 h-1.5 rounded-lg cursor-pointer"
+            class="w-full accent-amber-500 bg-slate-200 h-2 rounded-lg cursor-pointer"
           />
         </div>
 
         <!-- Height / Dimension (for 1D codes) -->
         <div v-if="currentDefinition.category === '1D'" class="space-y-1.5">
           <div class="flex items-center justify-between text-xs text-slate-600">
-            <span>Bar Height:</span>
-            <span class="text-amber-700 font-mono font-bold">{{ height }}mm</span>
+            <span class="font-semibold">Bar Height:</span>
+            <span class="text-amber-800 font-mono font-bold">{{ height }}mm</span>
           </div>
           <input
             type="range"
@@ -188,21 +188,21 @@ const colorSchemes = [
             step="5"
             :value="height"
             @input="$emit('update:height', Number(($event.target as HTMLInputElement).value))"
-            class="w-full accent-amber-500 bg-slate-200 h-1.5 rounded-lg cursor-pointer"
+            class="w-full accent-amber-500 bg-slate-200 h-2 rounded-lg cursor-pointer"
           />
         </div>
 
         <!-- Human Readable Text Toggle (1D) -->
         <div v-if="currentDefinition.category === '1D'" class="sm:col-span-2 flex items-center justify-between pt-2 border-t border-slate-100">
-          <span class="text-xs text-slate-800 font-medium">Show Human-Readable Label:</span>
+          <span class="text-xs text-slate-800 font-bold">Show Human-Readable Label:</span>
           <button
             type="button"
             @click="$emit('update:includeText', !includeText)"
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+            class="px-4 py-1.5 rounded-xl text-xs font-bold transition-all"
             :class="[
               includeText
-                ? 'bg-amber-400 text-slate-950 font-bold shadow-xs'
-                : 'bg-slate-100 text-slate-600 border border-slate-200'
+                ? 'clay-btn-amber text-slate-950 font-bold'
+                : 'clay-btn-white text-slate-600'
             ]"
           >
             {{ includeText ? 'Enabled' : 'Disabled' }}

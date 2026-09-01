@@ -35,41 +35,41 @@ const displayedFormats = computed(() => {
   <div class="space-y-4 select-none font-sans">
     
     <!-- Category Filter Tabs -->
-    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
-      <div class="text-xs uppercase tracking-wider font-semibold text-slate-900">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-3">
+      <div class="text-xs uppercase tracking-wider font-extrabold text-slate-900">
         Select Format
       </div>
 
-      <div class="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 text-xs font-medium">
+      <div class="flex items-center p-1.5 rounded-2xl clay-inset text-xs font-semibold">
         <button
           @click="activeCategory = 'popular'"
           type="button"
-          class="px-3 py-1 rounded-lg transition-colors"
-          :class="activeCategory === 'popular' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3.5 py-1.5 rounded-xl transition-all"
+          :class="activeCategory === 'popular' ? 'clay-btn-white text-slate-950 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-950'"
         >
           Popular
         </button>
         <button
           @click="activeCategory = '2d'"
           type="button"
-          class="px-3 py-1 rounded-lg transition-colors"
-          :class="activeCategory === '2d' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3.5 py-1.5 rounded-xl transition-all"
+          :class="activeCategory === '2d' ? 'clay-btn-white text-slate-950 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-950'"
         >
           2D Matrix
         </button>
         <button
           @click="activeCategory = '1d'"
           type="button"
-          class="px-3 py-1 rounded-lg transition-colors"
-          :class="activeCategory === '1d' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3.5 py-1.5 rounded-xl transition-all"
+          :class="activeCategory === '1d' ? 'clay-btn-white text-slate-950 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-950'"
         >
           1D Linear
         </button>
         <button
           @click="activeCategory = 'all'"
           type="button"
-          class="px-3 py-1 rounded-lg transition-colors"
-          :class="activeCategory === 'all' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3.5 py-1.5 rounded-xl transition-all"
+          :class="activeCategory === 'all' ? 'clay-btn-white text-slate-950 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-950'"
         >
           All ({{ FORMAT_LIST.length }})
         </button>
@@ -77,36 +77,36 @@ const displayedFormats = computed(() => {
     </div>
 
     <!-- Format Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <button
         v-for="fmt in displayedFormats"
         :key="fmt.id"
         type="button"
         @click="$emit('selectFormat', fmt.id)"
-        class="p-3 rounded-xl text-left border transition-all duration-150 flex flex-col justify-between gap-2 shadow-xs"
+        class="p-3.5 rounded-2xl text-left transition-all duration-150 flex flex-col justify-between gap-2.5"
         :class="[
           selectedFormat === fmt.id
-            ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-sm font-bold scale-[1.02]'
-            : 'bg-white text-slate-600 border-slate-200 hover:border-amber-300 hover:text-slate-900 hover:bg-slate-50'
+            ? 'clay-btn-amber font-bold text-slate-950 scale-[1.03]'
+            : 'clay-card text-slate-700 hover:text-slate-950 hover:scale-[1.01]'
         ]"
       >
         <div class="flex items-center justify-between w-full">
           <span
-            class="text-xs font-semibold truncate"
+            class="text-xs font-bold truncate"
             :class="selectedFormat === fmt.id ? 'text-slate-950' : 'text-slate-900'"
           >
             {{ fmt.name }}
           </span>
           <span
-            class="text-[10px] font-mono px-1.5 py-0.5 rounded"
-            :class="selectedFormat === fmt.id ? 'bg-black/15 text-slate-950 font-bold' : 'bg-slate-100 text-slate-500'"
+            class="text-[10px] font-mono px-1.5 py-0.5 rounded-md font-bold"
+            :class="selectedFormat === fmt.id ? 'bg-black/15 text-slate-950' : 'clay-pill text-slate-600'"
           >
             {{ fmt.category }}
           </span>
         </div>
         <p
-          class="text-[10px] truncate"
-          :class="selectedFormat === fmt.id ? 'text-slate-900/80 font-medium' : 'text-slate-500'"
+          class="text-[10px] truncate font-medium"
+          :class="selectedFormat === fmt.id ? 'text-slate-950/80 font-semibold' : 'text-slate-500'"
         >
           {{ fmt.standard }}
         </p>

@@ -58,18 +58,18 @@ onMounted(async () => {
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 font-sans">
     
     <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-6">
       <div class="space-y-1">
-        <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900">
+        <h1 class="font-display font-black text-3xl sm:text-4xl text-slate-900">
           Barcode Generator
         </h1>
-        <p class="text-sm text-slate-600 max-w-xl font-sans">
+        <p class="text-sm text-slate-600 max-w-xl font-sans font-medium">
           Encode URLs, serial numbers, GTINs, and text into vector SVGs and high-resolution PNGs.
         </p>
       </div>
 
-      <div class="flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 self-start sm:self-auto font-medium">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+      <div class="flex items-center gap-2 text-xs font-mono clay-pill-emerald px-3.5 py-1.5 self-start sm:self-auto font-bold">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>Vector SVG & PNG Export</span>
       </div>
     </div>
