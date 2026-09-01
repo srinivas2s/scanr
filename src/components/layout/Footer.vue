@@ -77,11 +77,18 @@ const supportedFormats = [
 
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="mt-12 pt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
+      <!-- Bottom Bar with Developed by Srinivas P & Nodify Solutions -->
+      <div class="mt-12 pt-6 border-t border-slate-200/60 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
         <div>
           <span>SCANR — Universal Barcode Machine</span>
         </div>
+
+        <div class="flex items-center gap-2 text-slate-700">
+          <span>Developed by <strong class="text-slate-900 font-bold">Srinivas P</strong></span>
+          <span class="text-slate-300">•</span>
+          <span class="text-amber-700 font-semibold">Nodify Solutions</span>
+        </div>
+
         <div class="text-slate-500">
           <span>Local Browser Engine • Client-Side Processing</span>
         </div>
