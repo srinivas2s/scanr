@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CropMarks from '@/components/ui/CropMarks.vue';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 import type { ScannerStats } from '@/types/barcode';
 
 interface Props {
@@ -15,7 +13,7 @@ interface Props {
 
 defineProps<Props>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'toggleTorch'): void;
   (e: 'switchCamera'): void;
 }>();
@@ -28,10 +26,10 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-scanr-black border-2 border-scanr-border overflow-hidden select-none flex items-center justify-center group shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+  <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-950 rounded-2xl border border-slate-200 overflow-hidden select-none flex items-center justify-center shadow-lg">
     
-    <!-- Background Technical Grid & Coordinate Ticks -->
-    <div class="absolute inset-0 tech-grid-bg opacity-30 pointer-events-none"></div>
+    <!-- Background Grid -->
+    <div class="absolute inset-0 tech-grid-bg opacity-10 pointer-events-none"></div>
 
     <!-- Video Element -->
     <video
@@ -46,64 +44,54 @@ defineExpose({
     <!-- Standby / Idle State Display -->
     <div
       v-if="!isStreaming"
-      class="relative z-10 flex flex-col items-center justify-center p-6 text-center space-y-4 max-w-md"
+      class="relative z-10 flex flex-col items-center justify-center p-6 text-center space-y-4 max-w-sm"
     >
-      <div class="w-16 h-16 border-2 border-dashed border-scanr-dim flex items-center justify-center text-scanr-muted relative">
-        <CropMarks size="sm" color="border-scanr-yellow" />
-        <svg class="w-8 h-8 text-scanr-dim" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-slate-300">
+        <svg class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
       </div>
 
       <div class="space-y-1">
-        <h3 class="font-mono text-sm font-bold uppercase tracking-widest text-scanr-white">
-          OPTICAL SENSOR STANDBY
+        <h3 class="font-semibold text-base text-white">
+          Camera Inactive
         </h3>
-        <p class="font-sans text-xs text-scanr-muted max-w-xs">
-          Click "START SCANNING" below to initialize your browser camera feed and begin optical frame analysis.
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Click "Start Camera" below to grant camera permission and begin scanning barcodes.
         </p>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <TechnicalLabel code="ENG-01" label="READY" variant="default" />
-        <TechnicalLabel code="LOCAL" label="ZERO-TELEMETRY" variant="accent" />
       </div>
     </div>
 
     <!-- Active Optical Viewfinder Elements -->
     <template v-if="isStreaming">
       
-      <!-- High-Contrast Targeting Reticle -->
+      <!-- Targeting Reticle -->
       <div class="absolute inset-8 sm:inset-14 md:inset-16 pointer-events-none z-10 flex items-center justify-center">
-        <!-- Target Box -->
-        <div class="relative w-full h-full max-w-md max-h-72 border border-scanr-white/20">
-          <CropMarks size="lg" color="border-scanr-yellow" showCenter />
-
-          <!-- High-Visibility Corner Accents -->
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-scanr-black/80 border border-scanr-border font-mono text-[9px] text-scanr-yellow tracking-widest uppercase">
-            OPTICAL ALIGNMENT TARGET
-          </div>
+        <div class="relative w-full h-full max-w-md max-h-72 border border-white/30 rounded-xl overflow-hidden backdrop-brightness-105">
+          
+          <!-- Reticle corner guides -->
+          <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-amber-400 rounded-tl"></div>
+          <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-amber-400 rounded-tr"></div>
+          <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-amber-400 rounded-bl"></div>
+          <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-amber-400 rounded-br"></div>
 
           <!-- Animated Scanning Laser Line -->
           <div
             v-if="isScanning"
-            class="absolute left-0 right-0 h-1 laser-line animate-laser pointer-events-none"
+            class="absolute left-0 right-0 h-0.5 laser-line animate-laser pointer-events-none"
           ></div>
         </div>
       </div>
 
       <!-- Top Viewport Telemetry Bar -->
-      <div class="absolute top-2 left-2 right-2 z-20 flex items-center justify-between pointer-events-none text-[10px] font-mono">
-        <div class="flex items-center gap-1.5 bg-scanr-black/80 backdrop-blur-sm px-2.5 py-1 border border-scanr-border text-scanr-white">
-          <span class="w-2 h-2 rounded-full bg-scanr-green animate-ping"></span>
-          <span class="font-bold">STREAM ACTIVE</span>
-          <span class="text-scanr-muted">// {{ stats.resolution }}</span>
+      <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none text-xs font-mono">
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-slate-800 shadow-sm font-sans font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs">Live Camera</span>
         </div>
 
-        <div class="flex items-center gap-1.5 bg-scanr-black/80 backdrop-blur-sm px-2.5 py-1 border border-scanr-border text-scanr-yellow font-bold">
-          <span>FPS: {{ stats.fps || '30' }}</span>
-          <span class="text-scanr-dim">|</span>
-          <span class="text-scanr-cyan">{{ stats.engine }}</span>
+        <div v-if="stats.resolution" class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-slate-600 text-xs shadow-sm font-mono">
+          <span>{{ stats.resolution }}</span>
         </div>
       </div>
 
@@ -114,17 +102,17 @@ defineExpose({
           v-if="torchSupported"
           @click="$emit('toggleTorch')"
           type="button"
-          class="p-2.5 font-mono text-xs font-bold border transition-all duration-150 backdrop-blur-sm shadow-md"
+          class="p-2.5 rounded-xl text-xs font-bold border transition-all duration-150 backdrop-blur-md shadow-md"
           :class="[
             torchActive
-              ? 'bg-scanr-yellow text-scanr-black border-scanr-yellow shadow-[0_0_12px_rgba(228,255,26,0.8)]'
-              : 'bg-scanr-black/80 text-scanr-white border-scanr-border hover:border-scanr-white'
+              ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-amber-500/30'
+              : 'bg-white/90 text-slate-800 border-slate-200 hover:bg-white'
           ]"
           title="Toggle Flashlight / Torch"
           aria-label="Toggle Flashlight"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </button>
 
@@ -133,19 +121,16 @@ defineExpose({
           v-if="cameraCount > 1"
           @click="$emit('switchCamera')"
           type="button"
-          class="p-2.5 font-mono text-xs font-bold bg-scanr-black/80 text-scanr-white border border-scanr-border hover:border-scanr-white hover:text-scanr-yellow transition-all duration-150 backdrop-blur-sm shadow-md"
-          title="Switch Optical Sensor"
+          class="p-2.5 rounded-xl text-xs font-bold bg-white/90 text-slate-800 border border-slate-200 hover:bg-white hover:text-amber-600 transition-all duration-150 backdrop-blur-md shadow-md"
+          title="Switch Camera"
           aria-label="Switch Camera"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
         </button>
       </div>
 
     </template>
-
-    <!-- Outer Viewport Crop Marks -->
-    <CropMarks size="lg" color="border-scanr-border" />
   </div>
 </template>

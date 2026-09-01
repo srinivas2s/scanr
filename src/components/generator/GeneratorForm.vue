@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import type { BarcodeFormat, FormatDefinition, GeneratorOptions } from '@/types/barcode';
 import type { SpecimenPreset } from '@/composables/useBarcodeGenerator';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 
 interface Props {
   selectedFormat: BarcodeFormat;
@@ -40,97 +39,100 @@ const canAutoCalculate = computed(() => {
 });
 
 const colorSchemes = [
-  { id: 'bw', label: 'STANDARD MONO', bar: '#000000', bg: '#ffffff' },
-  { id: 'invert', label: 'DARK INVERT', bar: '#ffffff', bg: '#101216' },
-  { id: 'hazard', label: 'SAFETY HAZARD', bar: '#ff2a00', bg: '#ffffff' },
-  { id: 'acid', label: 'OPTIC ACID', bar: '#090a0c', bg: '#e4ff1a' },
-  { id: 'cyan', label: 'CYAN BLUEPRINT', bar: '#00f0ff', bg: '#090a0c' },
+  { id: 'bw', label: 'Classic B&W', bar: '#000000', bg: '#ffffff' },
+  { id: 'invert', label: 'Dark Inverted', bar: '#ffffff', bg: '#0f172a' },
+  { id: 'hazard', label: 'Safety Red', bar: '#dc2626', bg: '#ffffff' },
+  { id: 'acid', label: 'Amber Accent', bar: '#0f172a', bg: '#fbbf24' },
+  { id: 'cyan', label: 'Cyan Blueprint', bar: '#0284c7', bg: '#f0f9ff' },
 ] as const;
 </script>
 
 <template>
-  <div class="space-y-6 font-mono">
+  <div class="space-y-6 font-sans">
     
     <!-- Input Section -->
-    <div class="p-5 bg-scanr-panel border border-scanr-border space-y-4">
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
       <div class="flex items-center justify-between">
-        <label for="barcode-input" class="text-xs uppercase font-bold text-scanr-white tracking-wider flex items-center gap-2">
-          <span>VALUE PAYLOAD TO ENCODE</span>
-          <TechnicalLabel :code="currentDefinition.id" :label="currentDefinition.name" variant="accent" size="xs" />
+        <label for="barcode-input" class="text-sm font-semibold text-slate-900 flex items-center gap-2">
+          <span>Payload Value</span>
+          <span class="px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-semibold">
+            {{ currentDefinition.name }}
+          </span>
         </label>
-        <span class="text-[10px] text-scanr-muted font-mono">
-          {{ barcodeValue.length }} CHARS
+        <span class="text-xs text-slate-500 font-mono">
+          {{ barcodeValue.length }} chars
         </span>
       </div>
 
-      <div class="relative">
+      <div class="space-y-2">
         <input
           id="barcode-input"
           type="text"
           :value="barcodeValue"
           @input="$emit('update:barcodeValue', ($event.target as HTMLInputElement).value)"
           :placeholder="currentDefinition.placeholder"
-          class="w-full bg-scanr-black border-2 px-4 py-3 text-base sm:text-lg font-mono text-scanr-white placeholder:text-scanr-dim focus:outline-none transition-colors"
+          class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-base font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-colors"
           :class="[
             validationError
-              ? 'border-scanr-red focus:border-scanr-red'
-              : 'border-scanr-border focus:border-scanr-yellow'
+              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+              : 'border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200'
           ]"
         />
 
+        <!-- Validation Error message -->
+        <p v-if="validationError" class="text-xs text-red-600 font-medium">
+          {{ validationError }}
+        </p>
+
         <!-- Checksum Calculation Trigger Button (EAN-13 / UPC-A) -->
-        <div v-if="canAutoCalculate" class="mt-2">
+        <div v-if="canAutoCalculate" class="pt-1">
           <button
             @click="$emit('autoCalculateChecksum')"
             type="button"
-            class="px-3 py-1.5 bg-scanr-yellow text-scanr-black text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-scanr-white transition-colors"
+            class="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 hover:bg-amber-300 transition-colors shadow-xs"
           >
-            <span>+ COMPUTE CHECK DIGIT (MOD-10)</span>
+            <span>+ Auto-Compute Mod-10 Checksum Digit</span>
           </button>
         </div>
       </div>
 
       <!-- Format Description & Requirements Help -->
-      <div class="text-[11px] font-sans text-scanr-muted leading-relaxed flex items-start gap-2 bg-scanr-dark p-2.5 border border-scanr-border/60">
-        <span class="text-scanr-yellow font-mono font-bold">INFO:</span>
-        <span>{{ currentDefinition.description }}</span>
+      <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+        {{ currentDefinition.description }}
       </div>
     </div>
 
     <!-- Quick Specimen Presets -->
-    <div class="p-4 bg-scanr-dark border border-scanr-border space-y-3">
-      <div class="text-xs font-bold uppercase tracking-wider text-scanr-white flex items-center justify-between">
-        <span>SPECIMEN PRESETS</span>
-        <span class="text-[10px] text-scanr-muted">FAST FILL</span>
+    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+      <div class="text-xs font-semibold uppercase tracking-wider text-slate-900 flex items-center justify-between">
+        <span>Quick Presets</span>
+        <span class="text-[11px] text-slate-500">Fast Fill</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div class="flex flex-wrap gap-2">
         <button
           v-for="preset in presets"
           :key="preset.id"
           type="button"
           @click="$emit('applyPreset', preset)"
-          class="p-2 text-left bg-scanr-panel border border-scanr-border hover:border-scanr-yellow text-xs space-y-0.5 transition-colors group"
+          class="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 text-xs text-slate-800 hover:text-slate-950 transition-colors flex items-center gap-2 group shadow-xs"
         >
-          <div class="flex items-center justify-between text-[10px]">
-            <span class="font-bold text-scanr-white group-hover:text-scanr-yellow">{{ preset.name }}</span>
-            <span class="text-scanr-dim font-mono">#{{ preset.format }}</span>
-          </div>
-          <p class="text-[9px] font-mono text-scanr-muted truncate">{{ preset.value }}</p>
+          <span class="font-medium group-hover:text-amber-700">{{ preset.name }}</span>
+          <span class="text-[10px] font-mono text-slate-400">#{{ preset.format }}</span>
         </button>
       </div>
     </div>
 
     <!-- Visual Parameters Settings -->
-    <div class="p-5 bg-scanr-panel border border-scanr-border space-y-5">
-      <div class="text-xs font-bold uppercase tracking-wider text-scanr-white border-b border-scanr-border pb-2">
-        OPTICAL PARAMETERS
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-5">
+      <div class="text-sm font-semibold text-slate-900 border-b border-slate-100 pb-2">
+        Appearance Options
       </div>
 
       <!-- Color Schemes -->
       <div class="space-y-2">
-        <div class="text-[10px] uppercase tracking-wider text-scanr-muted font-bold">
-          COLOR SPECIFICATION PALETTE
+        <div class="text-xs font-medium text-slate-600">
+          Color Scheme
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
           <button
@@ -138,18 +140,18 @@ const colorSchemes = [
             :key="cs.id"
             type="button"
             @click="$emit('update:colorScheme', cs.id)"
-            class="p-2 text-center border text-[10px] font-bold uppercase transition-all flex flex-col items-center gap-1.5"
+            class="p-2 rounded-xl border text-xs font-medium transition-all flex flex-col items-center gap-2"
             :class="[
               colorScheme === cs.id
-                ? 'border-scanr-yellow bg-scanr-dark shadow-[0_0_8px_rgba(228,255,26,0.3)]'
-                : 'border-scanr-border bg-scanr-dark/60 text-scanr-muted hover:text-scanr-white hover:border-scanr-border'
+                ? 'border-amber-500 bg-amber-50/60 shadow-xs ring-2 ring-amber-400 text-slate-950 font-bold'
+                : 'border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900 hover:border-slate-300'
             ]"
           >
             <!-- Palette Color Swatch Preview -->
-            <div class="w-full h-4 border border-scanr-border flex items-center justify-center" :style="{ backgroundColor: cs.bg }">
-              <span class="w-4 h-2" :style="{ backgroundColor: cs.bar }"></span>
+            <div class="w-full h-4 rounded border border-slate-300 flex items-center justify-center" :style="{ backgroundColor: cs.bg }">
+              <span class="w-3.5 h-2 rounded-xs" :style="{ backgroundColor: cs.bar }"></span>
             </div>
-            <span class="truncate">{{ cs.label }}</span>
+            <span class="text-[11px] truncate">{{ cs.label }}</span>
           </button>
         </div>
       </div>
@@ -158,9 +160,9 @@ const colorSchemes = [
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
         <!-- Scale Multiplier -->
         <div class="space-y-1.5">
-          <div class="flex items-center justify-between text-xs text-scanr-muted">
-            <span>SCALE MULTIPLIER:</span>
-            <span class="text-scanr-yellow font-bold">{{ scale }}x</span>
+          <div class="flex items-center justify-between text-xs text-slate-600">
+            <span>Scale:</span>
+            <span class="text-amber-700 font-mono font-bold">{{ scale }}x</span>
           </div>
           <input
             type="range"
@@ -169,15 +171,15 @@ const colorSchemes = [
             step="1"
             :value="scale"
             @input="$emit('update:scale', Number(($event.target as HTMLInputElement).value))"
-            class="w-full accent-scanr-yellow bg-scanr-dark h-1.5 cursor-pointer"
+            class="w-full accent-amber-500 bg-slate-200 h-1.5 rounded-lg cursor-pointer"
           />
         </div>
 
         <!-- Height / Dimension (for 1D codes) -->
         <div v-if="currentDefinition.category === '1D'" class="space-y-1.5">
-          <div class="flex items-center justify-between text-xs text-scanr-muted">
-            <span>BAR HEIGHT:</span>
-            <span class="text-scanr-yellow font-bold">{{ height }}mm</span>
+          <div class="flex items-center justify-between text-xs text-slate-600">
+            <span>Bar Height:</span>
+            <span class="text-amber-700 font-mono font-bold">{{ height }}mm</span>
           </div>
           <input
             type="range"
@@ -186,24 +188,24 @@ const colorSchemes = [
             step="5"
             :value="height"
             @input="$emit('update:height', Number(($event.target as HTMLInputElement).value))"
-            class="w-full accent-scanr-yellow bg-scanr-dark h-1.5 cursor-pointer"
+            class="w-full accent-amber-500 bg-slate-200 h-1.5 rounded-lg cursor-pointer"
           />
         </div>
 
         <!-- Human Readable Text Toggle (1D) -->
-        <div v-if="currentDefinition.category === '1D'" class="sm:col-span-2 flex items-center justify-between pt-2 border-t border-scanr-border/40">
-          <span class="text-xs text-scanr-white font-bold uppercase">INCLUDE HUMAN-READABLE TEXT:</span>
+        <div v-if="currentDefinition.category === '1D'" class="sm:col-span-2 flex items-center justify-between pt-2 border-t border-slate-100">
+          <span class="text-xs text-slate-800 font-medium">Show Human-Readable Label:</span>
           <button
             type="button"
             @click="$emit('update:includeText', !includeText)"
-            class="px-3 py-1 text-xs font-bold uppercase border transition-colors"
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
             :class="[
               includeText
-                ? 'bg-scanr-white text-scanr-black border-scanr-white'
-                : 'bg-scanr-dark text-scanr-muted border-scanr-border'
+                ? 'bg-amber-400 text-slate-950 font-bold shadow-xs'
+                : 'bg-slate-100 text-slate-600 border border-slate-200'
             ]"
           >
-            {{ includeText ? 'ENABLED' : 'DISABLED' }}
+            {{ includeText ? 'Enabled' : 'Disabled' }}
           </button>
         </div>
       </div>

@@ -2,8 +2,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { ScanResult } from '@/types/barcode';
-import CropMarks from '@/components/ui/CropMarks.vue';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 import IndustrialButton from '@/components/ui/IndustrialButton.vue';
 import { audioService } from '@/services/audio';
 
@@ -61,85 +59,61 @@ const makeDerivativeCode = () => {
 </script>
 
 <template>
-  <div class="relative bg-scanr-panel border-2 border-scanr-yellow shadow-[6px_6px_0px_0px_rgba(228,255,26,0.9)] p-5 sm:p-6 space-y-6 font-mono overflow-hidden">
+  <div class="rounded-2xl bg-white border border-amber-300 shadow-xl shadow-amber-500/10 p-6 space-y-5 font-sans">
     
-    <!-- Corner Crop Marks in Safety Yellow -->
-    <CropMarks size="md" color="border-scanr-yellow" />
-
-    <!-- Card Header Telemetry -->
-    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-scanr-border pb-4">
+    <!-- Card Header -->
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
       <div class="flex items-center gap-2.5">
-        <span class="w-3 h-3 bg-scanr-yellow inline-block animate-ping"></span>
-        <h2 class="font-display font-black text-lg sm:text-xl text-scanr-white tracking-tight uppercase">
-          SPECIMEN DETECTED & LOCKED
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <h2 class="font-bold text-lg text-slate-900">
+          Barcode Detected
         </h2>
       </div>
 
-      <div class="flex items-center gap-2 text-xs">
-        <TechnicalLabel :code="result.id" label="DECODED" variant="accent" />
-        <span class="text-scanr-dim hidden sm:inline">|</span>
-        <span class="text-scanr-muted text-[11px]">
+      <div class="flex items-center gap-2 text-xs font-mono">
+        <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
+          {{ result.format }}
+        </span>
+        <span class="text-slate-500">
           {{ new Date(result.timestamp).toLocaleTimeString() }}
         </span>
       </div>
     </div>
 
-    <!-- Symbology & Type Callout -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="p-3 bg-scanr-dark border border-scanr-border space-y-1">
-        <div class="text-[10px] text-scanr-muted uppercase tracking-widest">
-          SYMBOLOGY FORMAT
-        </div>
-        <div class="text-base sm:text-lg font-black text-scanr-yellow uppercase">
-          {{ result.format }}
-        </div>
-      </div>
-
-      <div class="p-3 bg-scanr-dark border border-scanr-border space-y-1">
-        <div class="text-[10px] text-scanr-muted uppercase tracking-widest">
-          PAYLOAD CLASSIFICATION
-        </div>
-        <div class="text-base sm:text-lg font-black text-scanr-cyan uppercase flex items-center gap-1.5">
-          <span>●</span>
-          <span>{{ result.detectedType }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Decoded Raw Value Display Box -->
+    <!-- Decoded Value Display Box -->
     <div class="space-y-2">
-      <div class="flex items-center justify-between text-xs text-scanr-muted">
-        <span class="uppercase tracking-widest font-bold text-scanr-white">DECODED VALUE PAYLOAD:</span>
-        <span class="text-[10px]">{{ result.rawText.length }} CHARACTERS</span>
+      <div class="flex items-center justify-between text-xs text-slate-600">
+        <span class="font-medium text-slate-800">Decoded Content:</span>
+        <span class="font-mono text-[11px]">{{ result.rawText.length }} chars</span>
       </div>
 
-      <div class="p-4 bg-scanr-black border-2 border-scanr-border text-scanr-white font-mono text-sm sm:text-base break-all select-all leading-relaxed relative group">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono text-base sm:text-lg break-all select-all leading-relaxed">
         {{ result.rawText }}
       </div>
     </div>
 
-    <!-- Context-Specific Smart Action Box -->
-    <div v-if="result.detectedType === 'URL'" class="p-3 bg-scanr-cyan/10 border border-scanr-cyan/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-      <div class="flex items-center gap-2 text-scanr-cyan">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+    <!-- Smart URL Action Banner (if URL) -->
+    <div v-if="result.detectedType === 'URL'" class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2 text-sky-800 font-medium">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
         </svg>
-        <span class="font-bold">WEB RESOURCE DETECTED</span>
+        <span>Link Detected</span>
       </div>
       <IndustrialButton
         @click="openExternalUrl(result.parsedData?.url || result.rawText)"
         variant="acid"
         size="sm"
       >
-        <span>OPEN LINK IN BROWSER</span>
+        <span>Open in New Tab</span>
         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
       </IndustrialButton>
     </div>
 
     <!-- Action Toolbar Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-scanr-border">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-slate-100">
       <!-- 1. Copy Button -->
       <IndustrialButton
         @click="copyValue"
@@ -148,12 +122,12 @@ const makeDerivativeCode = () => {
         block
       >
         <svg v-if="!copied" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
-        <svg v-else class="w-4 h-4 text-scanr-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="3" d="M5 13l4 4L19 7" />
+        <svg v-else class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
         </svg>
-        <span>{{ copied ? 'COPIED TO CLIPBOARD' : 'COPY VALUE' }}</span>
+        <span>{{ copied ? 'Copied!' : 'Copy Text' }}</span>
       </IndustrialButton>
 
       <!-- 2. Web Search Button -->
@@ -164,9 +138,9 @@ const makeDerivativeCode = () => {
         block
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <span>SEARCH WEB</span>
+        <span>Search Web</span>
       </IndustrialButton>
 
       <!-- 3. Make Derivative Barcode -->
@@ -176,23 +150,23 @@ const makeDerivativeCode = () => {
         size="md"
         block
       >
-        <svg class="w-4 h-4 text-scanr-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M12 4v16m8-8H4" />
+        <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>MAKE DERIVATIVE</span>
+        <span>Make Barcode</span>
       </IndustrialButton>
 
-      <!-- 4. Scan Next Specimen -->
+      <!-- 4. Scan Next -->
       <IndustrialButton
         @click="$emit('scanAgain')"
-        variant="hazard"
+        variant="acid"
         size="md"
         block
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="square" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
-        <span>SCAN NEXT</span>
+        <span>Scan Next</span>
       </IndustrialButton>
     </div>
 

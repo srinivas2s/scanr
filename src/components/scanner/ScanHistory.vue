@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { ScanResult } from '@/types/barcode';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 import { audioService } from '@/services/audio';
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 
 defineProps<Props>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'selectResult', result: ScanResult): void;
   (e: 'clearHistory'): void;
 }>();
@@ -33,40 +32,41 @@ const copyText = async (res: ScanResult, event: MouseEvent) => {
 </script>
 
 <template>
-  <div v-if="history.length > 0" class="p-4 sm:p-5 bg-scanr-dark border border-scanr-border space-y-4 font-mono">
+  <div v-if="history.length > 0" class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 font-sans">
     
-    <div class="flex items-center justify-between border-b border-scanr-border pb-2">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
       <div class="flex items-center gap-2">
-        <span class="text-xs uppercase font-bold text-scanr-white tracking-widest">
-          OPTICAL BUFFER LOG
+        <span class="text-sm font-semibold text-slate-900">
+          Recent Scans
         </span>
-        <TechnicalLabel :label="`${history.length} SPECIMENS`" variant="default" size="xs" />
+        <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-mono font-medium">
+          {{ history.length }}
+        </span>
       </div>
 
       <button
         @click="$emit('clearHistory')"
         type="button"
-        class="text-[10px] uppercase text-scanr-dim hover:text-scanr-red font-semibold transition-colors focus:outline-none"
+        class="text-xs text-slate-500 hover:text-red-600 transition-colors focus:outline-none"
       >
-        [ CLEAR BUFFER ]
+        Clear All
       </button>
     </div>
 
-    <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+    <div class="space-y-2 max-h-64 overflow-y-auto pr-1">
       <div
         v-for="item in history"
         :key="item.id"
         @click="$emit('selectResult', item)"
-        class="p-3 bg-scanr-panel border border-scanr-border hover:border-scanr-yellow flex items-center justify-between gap-3 cursor-pointer group transition-all duration-150"
+        class="p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 flex items-center justify-between gap-3 cursor-pointer group transition-all duration-150"
       >
         <div class="space-y-1 min-w-0 flex-1">
-          <div class="flex items-center gap-2 text-[10px]">
-            <span class="font-bold text-scanr-yellow uppercase">{{ item.format }}</span>
-            <span class="text-scanr-dim">•</span>
-            <span class="text-scanr-muted">{{ new Date(item.timestamp).toLocaleTimeString() }}</span>
-            <span class="text-scanr-cyan text-[9px]">#{{ item.id }}</span>
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="font-semibold text-amber-700">{{ item.format }}</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-slate-500 text-[11px]">{{ new Date(item.timestamp).toLocaleTimeString() }}</span>
           </div>
-          <div class="text-xs text-scanr-white font-mono truncate group-hover:text-scanr-yellow transition-colors">
+          <div class="text-xs text-slate-800 font-mono truncate group-hover:text-slate-950 transition-colors">
             {{ item.rawText }}
           </div>
         </div>
@@ -74,14 +74,14 @@ const copyText = async (res: ScanResult, event: MouseEvent) => {
         <button
           @click="copyText(item, $event)"
           type="button"
-          class="p-1.5 bg-scanr-dark border border-scanr-border text-scanr-muted hover:text-scanr-white hover:border-scanr-white transition-colors"
-          :title="copiedId === item.id ? 'Copied' : 'Copy payload'"
+          class="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors shadow-xs"
+          :title="copiedId === item.id ? 'Copied' : 'Copy'"
         >
           <svg v-if="copiedId !== item.id" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
-          <svg v-else class="w-3.5 h-3.5 text-scanr-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="3" d="M5 13l4 4L19 7" />
+          <svg v-else class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
           </svg>
         </button>
       </div>

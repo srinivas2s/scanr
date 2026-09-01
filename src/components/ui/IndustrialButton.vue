@@ -27,49 +27,46 @@ defineEmits<{
     :type="type"
     :disabled="disabled"
     @click="$emit('click', $event)"
-    class="relative inline-flex items-center justify-center font-mono uppercase tracking-wider font-bold transition-all duration-100 select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-scanr-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-scanr-black disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer"
+    class="relative inline-flex items-center justify-center font-medium transition-all duration-150 select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer rounded-xl font-sans"
     :class="[
       block ? 'w-full' : '',
       
       // Sizes
-      size === 'sm' ? 'text-xs px-3 py-1.5 gap-1.5' :
-      size === 'md' ? 'text-sm px-5 py-2.5 gap-2' :
-      size === 'lg' ? 'text-base px-7 py-3.5 gap-3 tracking-widest' :
-      'text-lg px-9 py-4 gap-3.5 tracking-widest font-black',
+      size === 'sm' ? 'text-xs px-3 py-1.5 gap-1.5 rounded-lg' :
+      size === 'md' ? 'text-sm px-4 py-2.5 gap-2' :
+      size === 'lg' ? 'text-base px-6 py-3.5 gap-2.5 font-semibold' :
+      'text-lg px-8 py-4 gap-3 font-bold',
 
       // Variants
       variant === 'primary' ? [
-        'bg-scanr-white text-scanr-black border border-scanr-white',
-        'hover:bg-scanr-yellow hover:border-scanr-yellow hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.8)]',
-        'active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
+        'bg-slate-900 text-white font-semibold shadow-sm',
+        'hover:bg-slate-800 hover:shadow-md hover:shadow-slate-900/10',
+        'active:scale-[0.98]'
       ] :
       variant === 'acid' ? [
-        'bg-scanr-yellow text-scanr-black border-2 border-scanr-yellow shadow-[4px_4px_0px_0px_rgba(228,255,26,0.5)]',
-        'hover:bg-scanr-white hover:border-scanr-white hover:text-scanr-black hover:shadow-[5px_5px_0px_0px_rgba(255,255,255,0.9)]',
-        'active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+        'bg-amber-400 text-slate-950 font-bold shadow-sm shadow-amber-500/20',
+        'hover:bg-amber-300 hover:shadow-md hover:shadow-amber-500/30',
+        'active:scale-[0.98]'
       ] :
       variant === 'hazard' ? [
-        'bg-scanr-red text-scanr-white border border-scanr-red shadow-[4px_4px_0px_0px_rgba(255,42,0,0.5)]',
-        'hover:bg-[#ff4420] hover:shadow-[5px_5px_0px_0px_rgba(255,42,0,0.9)]',
-        'active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+        'bg-red-600 text-white font-semibold shadow-sm shadow-red-500/20',
+        'hover:bg-red-500 hover:shadow-md hover:shadow-red-500/30',
+        'active:scale-[0.98]'
       ] :
       variant === 'secondary' ? [
-        'bg-scanr-elevated text-scanr-white border border-scanr-border',
-        'hover:border-scanr-white hover:bg-scanr-panel hover:text-scanr-yellow',
-        'active:translate-x-[2px] active:translate-y-[2px]'
+        'bg-white text-slate-800 border border-slate-200 shadow-xs',
+        'hover:bg-slate-50 hover:border-slate-300 hover:text-slate-950',
+        'active:scale-[0.98]'
       ] : [
-        'bg-transparent text-scanr-muted border border-transparent',
-        'hover:text-scanr-white hover:bg-scanr-elevated/60 hover:border-scanr-border',
-        'active:bg-scanr-elevated'
+        'bg-transparent text-slate-600',
+        'hover:text-slate-900 hover:bg-slate-100',
+        'active:scale-[0.98]'
       ],
 
       // Active state
-      active ? 'ring-2 ring-scanr-yellow ring-offset-2 ring-offset-scanr-black bg-scanr-elevated text-scanr-yellow' : ''
+      active ? 'ring-2 ring-amber-400 bg-slate-100 text-slate-950 font-semibold' : ''
     ]"
   >
-    <!-- Corner notches -->
-    <span class="absolute top-0 right-0 w-1.5 h-1.5 bg-scanr-black border-l border-b border-scanr-border pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></span>
-    
     <slot />
   </button>
 </template>

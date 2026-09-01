@@ -4,15 +4,12 @@ import Footer from '@/components/layout/Footer.vue';
 </script>
 
 <template>
-  <div class="min-h-screen bg-scanr-black text-scanr-white flex flex-col selection:bg-scanr-yellow selection:text-scanr-black relative">
+  <div class="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-amber-300 selection:text-slate-950 font-sans">
     
-    <!-- Top Fixed Coordinate Ruler -->
-    <div class="hidden xl:flex fixed top-0 left-0 right-0 h-1 bg-scanr-border/40 z-50 pointer-events-none"></div>
-
     <!-- Navigation Header -->
     <Navbar />
 
-    <!-- Main Content Area with Routing -->
+    <!-- Main Content Area with Smooth Page Routing Transitions -->
     <main class="flex-1">
       <router-view v-slot="{ Component }">
         <transition

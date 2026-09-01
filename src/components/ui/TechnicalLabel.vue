@@ -14,22 +14,23 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div
-    class="inline-flex items-center gap-1.5 font-mono uppercase tracking-widest font-semibold select-none border transition-colors"
+  <span
+    class="inline-flex items-center gap-1.5 font-mono select-none rounded-md transition-colors font-medium"
     :class="[
-      size === 'xs' ? 'text-[10px] px-1.5 py-0.5' : size === 'sm' ? 'text-xs px-2 py-0.5' : 'text-sm px-2.5 py-1',
+      size === 'xs' ? 'text-[11px] px-2 py-0.5' : size === 'sm' ? 'text-xs px-2.5 py-1' : 'text-sm px-3 py-1.5',
       variant === 'default'
-        ? 'bg-scanr-dark border-scanr-border text-scanr-muted'
+        ? 'bg-slate-100 border border-slate-200 text-slate-700'
         : variant === 'accent'
-        ? 'bg-scanr-yellow text-scanr-black border-scanr-yellow font-bold'
+        ? 'bg-amber-50 border border-amber-200 text-amber-800 font-semibold'
         : variant === 'hazard'
-        ? 'bg-scanr-red text-scanr-white border-scanr-red font-bold'
+        ? 'bg-red-50 border border-red-200 text-red-700 font-semibold'
         : variant === 'cyan'
-        ? 'bg-scanr-cyan/10 text-scanr-cyan border-scanr-cyan/30'
-        : 'border-transparent text-scanr-dim bg-transparent'
+        ? 'bg-sky-50 border border-sky-200 text-sky-700 font-semibold'
+        : 'text-slate-600 bg-transparent'
     ]"
   >
-    <span v-if="code" class="opacity-70 font-normal">#{{ code }}</span>
+    <span v-if="code" class="opacity-75 font-mono">{{ code }}</span>
+    <span v-if="code && label" class="opacity-40">•</span>
     <span class="truncate">{{ label }}</span>
-  </div>
+  </span>
 </template>

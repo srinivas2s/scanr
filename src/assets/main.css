@@ -1,108 +1,86 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@layer base {
-  :root {
-    --color-scanr-black: #090a0c;
-    --color-scanr-dark: #101216;
-    --color-scanr-panel: #16181f;
-    --color-scanr-elevated: #1e212b;
-    --color-scanr-border: #2b2f3d;
-    --color-scanr-line: #3a3f52;
-    --color-scanr-white: #f5f4f0;
-    --color-scanr-paper: #e8e6df;
-    --color-scanr-muted: #7e8494;
-    --color-scanr-dim: #4b5162;
-    --color-scanr-red: #ff2a00;
-    --color-scanr-yellow: #e4ff1a;
-    --color-scanr-cyan: #00f0ff;
-    --color-scanr-green: #00ff66;
-  }
-
-  body {
-    background-color: var(--color-scanr-black);
-    color: var(--color-scanr-white);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  }
-
-  /* Custom Industrial Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #090a0c;
-    border-left: 1px solid #2b2f3d;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #3a3f52;
-    border-radius: 0px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #e4ff1a;
-  }
+:root {
+  --color-scanr-black: #ffffff;
+  --color-scanr-dark: #f1f5f9;
+  --color-scanr-panel: #ffffff;
+  --color-scanr-elevated: #f8fafc;
+  --color-scanr-border: #e2e8f0;
+  --color-scanr-line: #cbd5e1;
+  --color-scanr-white: #0f172a;
+  --color-scanr-paper: #1e293b;
+  --color-scanr-muted: #64748b;
+  --color-scanr-dim: #94a3b8;
+  --color-scanr-red: #ef4444;
+  --color-scanr-yellow: #f59e0b;
+  --color-scanr-cyan: #0284c7;
+  --color-scanr-green: #16a34a;
 }
 
-@layer components {
-  /* Industrial Card / Box styling */
-  .industrial-panel {
-    @apply bg-scanr-panel border border-scanr-border relative;
-  }
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .industrial-box {
-    @apply bg-scanr-panel border border-scanr-border shadow-[4px_4px_0px_0px_rgba(43,47,61,0.6)];
-  }
+/* Smooth Modern Scrollbar for Light Mode */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
-  .industrial-box-accent {
-    @apply bg-scanr-panel border-2 border-scanr-white shadow-[6px_6px_0px_0px_rgba(228,255,26,0.9)];
-  }
+/* Modern Clean Panels (Light Mode) */
+.scanr-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
 
-  .industrial-tag {
-    @apply inline-flex items-center px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider font-semibold border;
-  }
+.scanr-card-elevated {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
 
-  /* Technical measurement markers */
-  .crosshair-corner {
-    @apply absolute w-3 h-3 border-scanr-white/40 pointer-events-none;
-  }
+.scanr-glass {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
 
-  .crop-top-left {
-    @apply top-0 left-0 border-t-2 border-l-2;
-  }
-  .crop-top-right {
-    @apply top-0 right-0 border-t-2 border-r-2;
-  }
-  .crop-bottom-left {
-    @apply bottom-0 left-0 border-b-2 border-l-2;
-  }
-  .crop-bottom-right {
-    @apply bottom-0 right-0 border-b-2 border-r-2;
-  }
+/* Laser line scanner animation */
+.laser-line {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0) 0%, rgba(245, 158, 11, 0.85) 50%, rgba(245, 158, 11, 1) 100%);
+  box-shadow: 0 0 16px 2px rgba(245, 158, 11, 0.6), 0 0 6px 1px rgba(255, 255, 255, 0.9);
+}
 
-  /* Industrial grid backdrop */
-  .tech-grid-bg {
-    background-size: 24px 24px;
-    background-image: 
-      linear-gradient(to right, rgba(43, 47, 61, 0.25) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(43, 47, 61, 0.25) 1px, transparent 1px);
-  }
+.laser-line-red {
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0) 0%, rgba(239, 68, 68, 0.85) 50%, rgba(239, 68, 68, 1) 100%);
+  box-shadow: 0 0 16px 2px rgba(239, 68, 68, 0.6), 0 0 6px 1px rgba(255, 255, 255, 0.9);
+}
 
-  .dot-grid-bg {
-    background-size: 16px 16px;
-    background-image: radial-gradient(rgba(126, 132, 148, 0.3) 1px, transparent 1px);
-  }
-
-  /* Red laser beam */
-  .laser-line {
-    background: linear-gradient(180deg, rgba(255, 42, 0, 0) 0%, rgba(255, 42, 0, 0.8) 50%, rgba(255, 42, 0, 1) 100%);
-    box-shadow: 0 0 16px 2px rgba(255, 42, 0, 0.7), 0 0 4px 1px rgba(255, 255, 255, 0.9);
-  }
-
-  .laser-line-cyan {
-    background: linear-gradient(180deg, rgba(0, 240, 255, 0) 0%, rgba(0, 240, 255, 0.8) 50%, rgba(0, 240, 255, 1) 100%);
-    box-shadow: 0 0 16px 2px rgba(0, 240, 255, 0.7), 0 0 4px 1px rgba(255, 255, 255, 0.9);
-  }
+/* Subtle background grid (Light) */
+.tech-grid-bg {
+  background-size: 28px 28px;
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
 }
 
 /* Reduced motion accessibility */

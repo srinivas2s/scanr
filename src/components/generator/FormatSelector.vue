@@ -1,94 +1,116 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import type { BarcodeFormat } from '@/types/barcode';
 import { FORMAT_LIST } from '@/services/formats';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 
 interface Props {
   selectedFormat: BarcodeFormat;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
   (e: 'selectFormat', format: BarcodeFormat): void;
 }>();
 
-const oneDFormats = computed(() => FORMAT_LIST.filter((f) => f.category === '1D'));
-const twoDFormats = computed(() => FORMAT_LIST.filter((f) => f.category === '2D'));
+const activeCategory = ref<'popular' | '2d' | '1d' | 'all'>('popular');
+
+const popularFormatIds = ['QR', 'EAN13', 'CODE128', 'UPCA', 'DATAMATRIX', 'PDF417'];
+
+const displayedFormats = computed(() => {
+  if (activeCategory.value === 'popular') {
+    return FORMAT_LIST.filter((f) => popularFormatIds.includes(f.id));
+  }
+  if (activeCategory.value === '2d') {
+    return FORMAT_LIST.filter((f) => f.category === '2D');
+  }
+  if (activeCategory.value === '1d') {
+    return FORMAT_LIST.filter((f) => f.category === '1D');
+  }
+  return FORMAT_LIST;
+});
 </script>
 
 <template>
-  <div class="space-y-4 font-mono select-none">
+  <div class="space-y-4 select-none font-sans">
     
-    <!-- 1D Linear Symbologies Section -->
-    <div class="space-y-2">
-      <div class="flex items-center justify-between text-xs text-scanr-muted">
-        <span class="font-bold uppercase tracking-wider text-scanr-white">01 // 1D LINEAR SYMBOLOGIES</span>
-        <TechnicalLabel code="1D" label="OPTICAL STRIPES" variant="default" size="xs" />
+    <!-- Category Filter Tabs -->
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+      <div class="text-xs uppercase tracking-wider font-semibold text-slate-900">
+        Select Format
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <div class="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 text-xs font-medium">
         <button
-          v-for="fmt in oneDFormats"
-          :key="fmt.id"
+          @click="activeCategory = 'popular'"
           type="button"
-          @click="$emit('selectFormat', fmt.id)"
-          class="p-2.5 sm:p-3 text-left border transition-all duration-150 relative group"
-          :class="[
-            selectedFormat === fmt.id
-              ? 'bg-scanr-white text-scanr-black border-scanr-white shadow-[3px_3px_0px_0px_rgba(228,255,26,0.9)]'
-              : 'bg-scanr-panel text-scanr-muted border-scanr-border hover:border-scanr-white hover:text-scanr-white'
-          ]"
+          class="px-3 py-1 rounded-lg transition-colors"
+          :class="activeCategory === 'popular' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
         >
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-xs sm:text-sm tracking-tight truncate uppercase" :class="selectedFormat === fmt.id ? 'text-scanr-black' : 'text-scanr-white'">
-              {{ fmt.name }}
-            </span>
-            <span class="text-[9px] opacity-70">
-              #{{ fmt.id }}
-            </span>
-          </div>
-          <p class="text-[10px] font-sans truncate mt-1 opacity-80" :class="selectedFormat === fmt.id ? 'text-scanr-black/80' : 'text-scanr-muted'">
-            {{ fmt.standard }}
-          </p>
+          Popular
+        </button>
+        <button
+          @click="activeCategory = '2d'"
+          type="button"
+          class="px-3 py-1 rounded-lg transition-colors"
+          :class="activeCategory === '2d' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+        >
+          2D Matrix
+        </button>
+        <button
+          @click="activeCategory = '1d'"
+          type="button"
+          class="px-3 py-1 rounded-lg transition-colors"
+          :class="activeCategory === '1d' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+        >
+          1D Linear
+        </button>
+        <button
+          @click="activeCategory = 'all'"
+          type="button"
+          class="px-3 py-1 rounded-lg transition-colors"
+          :class="activeCategory === 'all' ? 'bg-white text-slate-900 font-semibold shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+        >
+          All ({{ FORMAT_LIST.length }})
         </button>
       </div>
     </div>
 
-    <!-- 2D Matrix Symbologies Section -->
-    <div class="space-y-2 pt-2">
-      <div class="flex items-center justify-between text-xs text-scanr-muted">
-        <span class="font-bold uppercase tracking-wider text-scanr-white">02 // 2D MATRIX SYMBOLOGIES</span>
-        <TechnicalLabel code="2D" label="HIGH-DENSITY" variant="accent" size="xs" />
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <button
-          v-for="fmt in twoDFormats"
-          :key="fmt.id"
-          type="button"
-          @click="$emit('selectFormat', fmt.id)"
-          class="p-2.5 sm:p-3 text-left border transition-all duration-150 relative group"
-          :class="[
-            selectedFormat === fmt.id
-              ? 'bg-scanr-yellow text-scanr-black border-scanr-yellow shadow-[3px_3px_0px_0px_rgba(255,255,255,0.9)] font-bold'
-              : 'bg-scanr-panel text-scanr-muted border-scanr-border hover:border-scanr-yellow hover:text-scanr-white'
-          ]"
+    <!-- Format Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+      <button
+        v-for="fmt in displayedFormats"
+        :key="fmt.id"
+        type="button"
+        @click="$emit('selectFormat', fmt.id)"
+        class="p-3 rounded-xl text-left border transition-all duration-150 flex flex-col justify-between gap-2 shadow-xs"
+        :class="[
+          selectedFormat === fmt.id
+            ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-sm font-bold scale-[1.02]'
+            : 'bg-white text-slate-600 border-slate-200 hover:border-amber-300 hover:text-slate-900 hover:bg-slate-50'
+        ]"
+      >
+        <div class="flex items-center justify-between w-full">
+          <span
+            class="text-xs font-semibold truncate"
+            :class="selectedFormat === fmt.id ? 'text-slate-950' : 'text-slate-900'"
+          >
+            {{ fmt.name }}
+          </span>
+          <span
+            class="text-[10px] font-mono px-1.5 py-0.5 rounded"
+            :class="selectedFormat === fmt.id ? 'bg-black/15 text-slate-950 font-bold' : 'bg-slate-100 text-slate-500'"
+          >
+            {{ fmt.category }}
+          </span>
+        </div>
+        <p
+          class="text-[10px] truncate"
+          :class="selectedFormat === fmt.id ? 'text-slate-900/80 font-medium' : 'text-slate-500'"
         >
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-xs sm:text-sm tracking-tight truncate uppercase" :class="selectedFormat === fmt.id ? 'text-scanr-black' : 'text-scanr-white'">
-              {{ fmt.name }}
-            </span>
-            <span class="text-[9px] opacity-70">
-              #2D
-            </span>
-          </div>
-          <p class="text-[10px] font-sans truncate mt-1 opacity-80" :class="selectedFormat === fmt.id ? 'text-scanr-black/80' : 'text-scanr-muted'">
-            {{ fmt.standard }}
-          </p>
-        </button>
-      </div>
+          {{ fmt.standard }}
+        </p>
+      </button>
     </div>
 
   </div>

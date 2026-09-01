@@ -14,7 +14,7 @@ interface Props {
 
 defineProps<Props>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'toggleStream'): void;
   (e: 'selectDevice', deviceId: string): void;
   (e: 'toggleTorch'): void;
@@ -23,23 +23,23 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="p-4 sm:p-5 bg-scanr-panel border border-scanr-border space-y-4">
+  <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 font-sans">
     
-    <!-- Primary Big Action Button -->
+    <!-- Primary Action Button & Secondary Controls -->
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
       <div class="sm:col-span-8">
         <IndustrialButton
           v-if="!isStreaming"
           @click="$emit('toggleStream')"
-          variant="hazard"
+          variant="acid"
           size="lg"
           block
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-            <path stroke-linecap="square" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>START SCANNING</span>
+          <span>Start Camera</span>
         </IndustrialButton>
 
         <IndustrialButton
@@ -49,11 +49,11 @@ const emit = defineEmits<{
           size="lg"
           block
         >
-          <svg class="w-5 h-5 text-scanr-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path stroke-linecap="square" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+          <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
           </svg>
-          <span>HALT OPTICAL STREAM</span>
+          <span>Stop Camera</span>
         </IndustrialButton>
       </div>
 
@@ -69,9 +69,9 @@ const emit = defineEmits<{
           :title="torchActive ? 'Turn Torch Off' : 'Turn Torch On'"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <span>{{ torchActive ? 'TORCH ON' : 'TORCH' }}</span>
+          <span>{{ torchActive ? 'Torch On' : 'Torch' }}</span>
         </IndustrialButton>
 
         <!-- Audio Mute/Unmute -->
@@ -80,29 +80,29 @@ const emit = defineEmits<{
           variant="secondary"
           size="lg"
           :block="!torchSupported"
-          :title="isMuted ? 'Unmute Audio Feedback' : 'Mute Audio Feedback'"
+          :title="isMuted ? 'Unmute Sound' : 'Mute Sound'"
         >
-          <svg v-if="!isMuted" class="w-5 h-5 text-scanr-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          <svg v-if="!isMuted" class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
           </svg>
-          <svg v-else class="w-5 h-5 text-scanr-dim" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="square" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+          <svg v-else class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
           </svg>
-          <span class="hidden sm:inline">{{ isMuted ? 'MUTED' : 'AUDIO' }}</span>
+          <span class="hidden sm:inline">{{ isMuted ? 'Muted' : 'Beep' }}</span>
         </IndustrialButton>
       </div>
     </div>
 
     <!-- Camera Device Selector Dropdown -->
-    <div v-if="devices.length > 1" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-scanr-border/60 text-xs font-mono">
-      <label for="camera-select" class="text-scanr-muted uppercase font-bold tracking-wider">
-        ACTIVE OPTICAL SENSOR:
+    <div v-if="devices.length > 1" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 border-t border-slate-100 text-xs">
+      <label for="camera-select" class="text-slate-600 font-medium">
+        Selected Camera:
       </label>
       <select
         id="camera-select"
         :value="selectedDeviceId"
         @change="$emit('selectDevice', ($event.target as HTMLSelectElement).value)"
-        class="bg-scanr-dark border border-scanr-border text-scanr-white px-3 py-1.5 focus:outline-none focus:border-scanr-yellow uppercase font-mono text-xs cursor-pointer"
+        class="bg-slate-50 border border-slate-200 rounded-lg text-slate-900 px-3 py-1.5 focus:outline-none focus:border-amber-400 text-xs cursor-pointer"
       >
         <option v-for="dev in devices" :key="dev.deviceId" :value="dev.deviceId">
           {{ dev.label }}

@@ -7,7 +7,6 @@ import type { BarcodeFormat } from '@/types/barcode';
 import FormatSelector from '@/components/generator/FormatSelector.vue';
 import GeneratorForm from '@/components/generator/GeneratorForm.vue';
 import BarcodeSpecimen from '@/components/generator/BarcodeSpecimen.vue';
-import TechnicalLabel from '@/components/ui/TechnicalLabel.vue';
 
 const route = useRoute();
 
@@ -56,32 +55,22 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 font-sans">
     
-    <!-- Page Header Specimen Strip -->
-    <div class="border-b-2 border-scanr-white pb-6 space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-scanr-muted">
-        <div class="flex items-center gap-2">
-          <TechnicalLabel code="02" label="ENCODING SUBSYSTEM" variant="accent" />
-          <span class="text-scanr-dim">///</span>
-          <span class="text-scanr-white">VECTOR SPECIMEN GENERATOR</span>
-        </div>
-        <div class="text-[11px] text-scanr-dim">
-          <span>LAT: CLIENT_VECTOR</span>
-          <span class="mx-2">•</span>
-          <span class="text-scanr-yellow">SVG + HIGH-RES PNG EXPORT</span>
-        </div>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+      <div class="space-y-1">
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900">
+          Barcode Generator
+        </h1>
+        <p class="text-sm text-slate-600 max-w-xl font-sans">
+          Encode URLs, serial numbers, GTINs, and text into vector SVGs and high-resolution PNGs.
+        </p>
       </div>
 
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-        <div>
-          <h1 class="font-display font-black text-4xl sm:text-6xl text-scanr-white tracking-tight uppercase">
-            MAKE A CODE.
-          </h1>
-          <p class="font-mono text-sm sm:text-base text-scanr-muted mt-1 max-w-2xl">
-            Turn information into an optically certified, machine-readable scannable mark with live specimen rendering.
-          </p>
-        </div>
+      <div class="flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 self-start sm:self-auto font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span>Vector SVG & PNG Export</span>
       </div>
     </div>
 
