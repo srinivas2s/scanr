@@ -65,7 +65,7 @@ export interface ScannerStats {
   fps: number;
   resolution: string;
   activeCamera: string;
-  engine: 'NATIVE_OPTICAL' | 'ZXING_FALLBACK' | 'IDLE';
+  engine: 'NATIVE_OPTICAL' | 'ZXING_MULTI_PASS' | 'ZXING_FALLBACK' | 'IDLE';
   torchSupported: boolean;
   torchActive: boolean;
 }
